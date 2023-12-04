@@ -78,4 +78,15 @@ public class Cell extends JFrame{
             }
         }
     }
+
+    //旗の入れ替え
+    public void toggleFlag(CustomButton buttons){
+        buttons.setFlag(!buttons.isFlag());
+
+        if(buttons.isFlag()){
+            buttons.setIcon(new ImageIcon(flagIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+        } else{
+            buttons.setIcon(new ImageIcon(defaultIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+        }
+    }
 }

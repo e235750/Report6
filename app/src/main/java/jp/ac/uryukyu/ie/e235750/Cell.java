@@ -4,10 +4,16 @@ import java.awt.*;
 import javax.swing.*;
 
 public class Cell extends JFrame{
+    private ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/default.png")); //デフォルトのボタンアイコン
+    private ImageIcon bombIcon    = new ImageIcon(getClass().getResource("/bomb.png"));    //爆弾のボタンアイコン
+    private ImageIcon flagIcon    = new ImageIcon(getClass().getResource("/flag.png"));    //旗のアイコン
+
     private int FIELD_ROW         = 5;   //フィールドの行
     private int FIELD_COLUMN      = 5;   //フィールドの列
     private int WINDOW_WIDTH      = 600; //ウィンドウの横幅
     private int WINDOW_HEIGHT     = 600; //ウィンドウの縦幅
+    private int IMAGE_WIDTH       = 50;  //画像の横幅
+    private int IMAGE_HEIGHT      = 50;  //画像の縦幅
 
     public Cell(String title){
         this.showGameWindow(title);
@@ -23,11 +29,11 @@ public class Cell extends JFrame{
         Container contentPane = getContentPane();
         contentPane.setLayout(new GridLayout(FIELD_COLUMN, FIELD_ROW));
 
-        JButton[][] buttons = new JButton[FIELD_ROW][FIELD_COLUMN];
+        CustomButton[][] buttons = new CustomButton[FIELD_ROW][FIELD_COLUMN];
         //セルの作成
         for (int x = 0; x < FIELD_ROW; x++) {
             for (int y = 0; y < FIELD_COLUMN; y++) {
-                buttons[x][y] = new JButton();
+                buttons[x][y] = new CustomButton(new ImageIcon(defaultIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
                 contentPane.add(buttons[x][y]);
             }
         }

@@ -57,4 +57,25 @@ public class Cell extends JFrame{
             }
         }
     }
+
+    //セルに周りの爆弾の数情報を追加
+    public void bombCountNearby(CustomButton[][] buttons){
+        for(int x = 0; x < FIELD_ROW; x ++){
+            for(int y = 0; y < FIELD_COLUMN; y ++){
+                if(!buttons[x][y].isBomb()){
+                    int bombCountNearby = 0;
+                    for(int i = x - 1; i <= x + 1; i ++){
+                        for(int j = y - 1; j <= y + 1; j ++){
+                            if(i >= 0 && i < FIELD_ROW && j >= 0 && j < FIELD_COLUMN){
+                                if(buttons[i][j].isBomb()){
+                                    bombCountNearby ++;
+                                }
+                            }
+                        }
+                    }
+                    buttons[x][y].setBombCountNearby(bombCountNearby);
+                }
+            }
+        }
+    }
 }

@@ -1,6 +1,8 @@
 package jp.ac.uryukyu.ie.e235750;
 
 import java.awt.*;
+import java.util.Random;
+
 import javax.swing.*;
 
 public class Cell extends JFrame{
@@ -35,6 +37,23 @@ public class Cell extends JFrame{
             for (int y = 0; y < FIELD_COLUMN; y++) {
                 buttons[x][y] = new CustomButton(new ImageIcon(defaultIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
                 contentPane.add(buttons[x][y]);
+            }
+        }
+
+        bombSetter(buttons);
+    }
+
+    //ボムを設置する
+    public void bombSetter(CustomButton[][] buttons){
+        Random rand = new Random();
+        int numBomb = 0;
+        while(numBomb < 10){
+            int i = rand.nextInt(FIELD_ROW);
+            int j = rand.nextInt(FIELD_COLUMN);
+
+            if(!buttons[i][j].isBomb()){
+                buttons[i][j].setBomb();
+                numBomb ++;
             }
         }
     }

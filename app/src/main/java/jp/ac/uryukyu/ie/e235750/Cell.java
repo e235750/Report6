@@ -100,7 +100,7 @@ public class Cell extends JFrame implements ActionListener, MouseListener{
     public void toggleFlag(CustomButton buttons){
         buttons.setFlag(!buttons.isFlag());
 
-        if(buttons.isFlag()){
+        if(buttons.isFlag() && buttons.getText().isEmpty()){
             buttons.setIcon(new ImageIcon(flagIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
         } else{
             buttons.setIcon(new ImageIcon(defaultIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
@@ -111,9 +111,9 @@ public class Cell extends JFrame implements ActionListener, MouseListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         CustomButton clickedButton = (CustomButton) e.getSource();
-        if(clickedButton.isBomb()){
+        if(clickedButton.isBomb() && !clickedButton.isFlag()){
             clickedButton.setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
-        } else {
+        } else if(!clickedButton.isFlag()){
             clickedButton.setHorizontalAlignment(SwingConstants.LEFT);
             clickedButton.setFont(new Font("San Francisco", Font.BOLD, 30));
             clickedButton.setText(Integer.toString(clickedButton.getBombCountNearby()));

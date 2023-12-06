@@ -10,7 +10,8 @@ import java.util.Random;
 
 
 
-public class Cell extends JFrame implements ActionListener, MouseListener{
+public class Cell extends JPanel implements ActionListener, MouseListener{
+    MinesweeperGame game;
 
     private ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/default.png")); //デフォルトのボタンアイコン
     private ImageIcon bombIcon    = new ImageIcon(getClass().getResource("/bomb.png"));    //爆弾のボタンアイコン
@@ -18,31 +19,17 @@ public class Cell extends JFrame implements ActionListener, MouseListener{
 
     private int FIELD_ROW         = 5;   //フィールドの行
     private int FIELD_COLUMN      = 5;   //フィールドの列
-    private int WINDOW_WIDTH      = 600; //ウィンドウの横幅
-    private int WINDOW_HEIGHT     = 600; //ウィンドウの縦幅
     private int IMAGE_WIDTH       = 50;  //画像の横幅
     private int IMAGE_HEIGHT      = 50;  //画像の縦幅
 
     private CustomButton[][] buttons;    //セル
 
-    public static void main(String[] args) {
-        Cell test = new Cell("test");
-        test.setVisible(true);
-    }
-
-    public Cell(String title){
-        this.showGameWindow(title);
-    }
-
     //セルを作成する
-    public void showGameWindow(String title){
-        //ウィンドウの設定
-        setTitle(title);
-        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Container contentPane = getContentPane();
-        contentPane.setLayout(new GridLayout(FIELD_COLUMN, FIELD_ROW));
+    public Cell(MinesweeperGame game){
+        this.game = game;
+
+        //パネルの設定
+        setLayout(new GridLayout(FIELD_COLUMN, FIELD_ROW));
         buttons = new CustomButton[FIELD_COLUMN][FIELD_ROW];
 
         //セルの作成
@@ -51,7 +38,7 @@ public class Cell extends JFrame implements ActionListener, MouseListener{
                 buttons[x][y] = new CustomButton(new ImageIcon(defaultIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
                 buttons[x][y].addActionListener(this);
                 buttons[x][y].addMouseListener(this);
-                contentPane.add(buttons[x][y]);
+                this.add(buttons[x][y]);
             }
         }
         //ボムの設置
@@ -107,12 +94,23 @@ public class Cell extends JFrame implements ActionListener, MouseListener{
         }
     }
 
+
     //ボタンをクリックした時の処理
     @Override
     public void actionPerformed(ActionEvent e) {
         CustomButton clickedButton = (CustomButton) e.getSource();
         if(clickedButton.isBomb() && !clickedButton.isFlag()){
             clickedButton.setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+            int option = JOptionPane.showConfirmDialog(this, "失敗; ;\nもう一度挑戦しますか", "失敗", 0, JOptionPane.QUESTION_MESSAGE);
+            switch (option) {
+                case 0:
+                    game.startGame();
+                    break;
+            
+                case 1:
+                    game.showTitlePanel();
+                    break;
+            }
         } else if(!clickedButton.isFlag()){
             clickedButton.setHorizontalAlignment(SwingConstants.LEFT);
             clickedButton.setFont(new Font("San Francisco", Font.BOLD, 30));

@@ -5,24 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TitleWindow extends JFrame {
-    private int WINDOW_WIDTH  = 600; // ウィンドウの横幅
-    private int WINDOW_HEIGHT = 600; // ウィンドウの縦幅
+public class TitlePanel extends JPanel {
+    MinesweeperGame game = new MinesweeperGame();
 
-    public static void main(String[] args) {
-            TitleWindow title = new TitleWindow();
-            title.showTitleWindow();
-            title.setVisible(true);
-    }
+    public TitlePanel(MinesweeperGame game){
+        this.game = game;
 
-    public void showTitleWindow(){
-        setTitle("Minesweeper");
-        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        Container contentPane = getContentPane();
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JPanel panelButton = new JPanel();
         JPanel panelTitle = new JPanel();
@@ -34,14 +23,7 @@ public class TitleWindow extends JFrame {
         start.setMaximumSize(new Dimension(Integer.MAX_VALUE, start.getMinimumSize().height)); // 幅を最大まで
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                contentPane.removeAll();
-                Cell gamePanel = new Cell();
-                gamePanel.showGameWindow();
-
-                contentPane.add(gamePanel.getContentPane());
-
-                revalidate();
-                repaint();
+                game.startGame();
             }
         });
 
@@ -62,10 +44,8 @@ public class TitleWindow extends JFrame {
         panelButton.add(exit);
         panelTitle.add(gameTitle);
         panelTitle.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
 
-        // パネルをフレームに追加
-        contentPane.add(panelTitle);
-        contentPane.add(panelButton);
+        this.add(panelTitle);
+        this.add(panelButton);
     }
 }

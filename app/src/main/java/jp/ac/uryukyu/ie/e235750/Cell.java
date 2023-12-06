@@ -24,24 +24,21 @@ public class Cell extends JFrame implements ActionListener, MouseListener{
     private int IMAGE_HEIGHT      = 50;  //画像の縦幅
 
     private CustomButton[][] buttons;    //セル
+    Container contentPane = getContentPane();
 
     public static void main(String[] args) {
-        Cell test = new Cell("test");
+        Cell test = new Cell();
+        test.showGameWindow();
         test.setVisible(true);
     }
 
-    public Cell(String title){
-        this.showGameWindow(title);
-    }
-
     //セルを作成する
-    public void showGameWindow(String title){
+    public void showGameWindow(){
         //ウィンドウの設定
-        setTitle(title);
+        setTitle("Minesweeper");
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Container contentPane = getContentPane();
         contentPane.setLayout(new GridLayout(FIELD_COLUMN, FIELD_ROW));
         buttons = new CustomButton[FIELD_COLUMN][FIELD_ROW];
 
@@ -107,12 +104,31 @@ public class Cell extends JFrame implements ActionListener, MouseListener{
         }
     }
 
+    public void newGame(){
+        this.contentPane.removeAll();
+        Cell gamePanel = new Cell();
+        gamePanel.showGameWindow();
+        revalidate();
+        repaint();
+        gamePanel.setVisible(true);
+    }
+
     //ボタンをクリックした時の処理
     @Override
     public void actionPerformed(ActionEvent e) {
         CustomButton clickedButton = (CustomButton) e.getSource();
         if(clickedButton.isBomb() && !clickedButton.isFlag()){
             clickedButton.setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+            int option = JOptionPane.showConfirmDialog(this, "失敗; ;\nもう一度挑戦しますか", "失敗", 0, JOptionPane.QUESTION_MESSAGE);
+            switch (option) {
+                case 0:
+                    newGame();
+                    break;
+            
+                case 1:
+                    System.exit(0);
+                    break;
+            }
         } else if(!clickedButton.isFlag()){
             clickedButton.setHorizontalAlignment(SwingConstants.LEFT);
             clickedButton.setFont(new Font("San Francisco", Font.BOLD, 30));

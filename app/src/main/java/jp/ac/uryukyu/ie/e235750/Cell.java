@@ -114,9 +114,9 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
             clickedButton.setHorizontalAlignment(SwingConstants.LEFT);
             clickedButton.setFont(new Font("San Francisco", Font.BOLD, 30));
             clickedButton.setText(Integer.toString(clickedButton.getBombCountNearby()));
-            clickedButton.setOpen(true);
             if(!clickedButton.isOpen()){
                 openCell ++;
+                clickedButton.setOpen(true);
             } else{
                 ; //何もしない
             }

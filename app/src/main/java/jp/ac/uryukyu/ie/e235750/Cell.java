@@ -8,8 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Random;
 
-
-
 public class Cell extends JPanel implements ActionListener, MouseListener{
     MinesweeperGame game;
 
@@ -17,14 +15,16 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
     private ImageIcon bombIcon    = new ImageIcon(getClass().getResource("/bomb.png"));    //爆弾のボタンアイコン
     private ImageIcon flagIcon    = new ImageIcon(getClass().getResource("/flag.png"));    //旗のアイコン
 
-    private int FIELD_ROW         = 5;   //フィールドの行
-    private int FIELD_COLUMN      = 5;   //フィールドの列
-    private int IMAGE_WIDTH       = 50;  //画像の横幅
-    private int IMAGE_HEIGHT      = 50;  //画像の縦幅
+    private int FIELD_ROW         = 5;
+    private int FIELD_COLUMN      = 5;
+    private int IMAGE_WIDTH       = 50;
+    private int IMAGE_HEIGHT      = 50;
+    private int NUM_BOMB          = 1;
+    private int flagCounter       = 0;
+    private int openCell          = 0;
 
-    private CustomButton[][] buttons;    //セル
+    private CustomButton[][] buttons; 
 
-    //セルを作成する
     public Cell(MinesweeperGame game){
         this.game = game;
 
@@ -41,17 +41,16 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
                 this.add(buttons[x][y]);
             }
         }
-        //ボムの設置
+        //ボム配置
         bombSetter(buttons);
         //セルに周りの爆弾の数情報を追加
         bombCountNearby(buttons);
     }
 
-    //ボムを設置する
-    public void bombSetter(CustomButton[][] buttons){
+    private void bombSetter(CustomButton[][] buttons){
         Random rand = new Random();
         int numBomb = 0;
-        while(numBomb < 10){
+        while(numBomb < NUM_BOMB){
             int i = rand.nextInt(FIELD_ROW);
             int j = rand.nextInt(FIELD_COLUMN);
 
@@ -62,8 +61,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         }
     }
 
-    //セルに周りの爆弾の数情報を追加
-    public void bombCountNearby(CustomButton[][] buttons){
+    private void bombCountNearby(CustomButton[][] buttons){
         for(int x = 0; x < FIELD_ROW; x ++){
             for(int y = 0; y < FIELD_COLUMN; y ++){
                 if(!buttons[x][y].isBomb()){
@@ -83,20 +81,21 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         }
     }
 
-    //旗の入れ替え
-    public void toggleFlag(CustomButton buttons){
-        buttons.setFlag(!buttons.isFlag());
-
-        if(buttons.isFlag() && buttons.getText().isEmpty()){
-            buttons.setIcon(new ImageIcon(flagIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
-        } else{
-            buttons.setIcon(new ImageIcon(defaultIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+    private void toggleFlag(CustomButton button){
+        if(!button.isOpen()){
+            if(!button.isFlag() && flagCounter < NUM_BOMB){
+                button.setFlag(true);
+                button.setIcon(new ImageIcon(flagIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+                flagCounter ++;
+            } else if(button.isFlag()){
+                button.setFlag(false);
+                button.setIcon(new ImageIcon(defaultIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+                flagCounter --;
+        }
         }
     }
 
 
-    //ボタンをクリックした時の処理
-    @Override
     public void actionPerformed(ActionEvent e) {
         CustomButton clickedButton = (CustomButton) e.getSource();
         if(clickedButton.isBomb() && !clickedButton.isFlag()){
@@ -115,12 +114,31 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
             clickedButton.setHorizontalAlignment(SwingConstants.LEFT);
             clickedButton.setFont(new Font("San Francisco", Font.BOLD, 30));
             clickedButton.setText(Integer.toString(clickedButton.getBombCountNearby()));
+            clickedButton.setOpen(true);
+            if(!clickedButton.isOpen()){
+                openCell ++;
+            } else{
+                ; //何もしない
+            }
+            
+
+            if(openCell == (FIELD_COLUMN * FIELD_ROW) - NUM_BOMB){
+                int option = JOptionPane.showConfirmDialog(this, "成功！\nもう一度挑戦しますか", "成功", 0, JOptionPane.QUESTION_MESSAGE);
+                switch (option) {
+                    case 0:
+                        game.startGame();
+                        break;
+            
+                    case 1:
+                        game.showTitlePanel();
+                        break;
+            }
+            }
+            
         }
         
     }
 
-    //マウスをクリックした時の処理
-    @Override
     public void mouseClicked(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e)) {
             CustomButton clickedButton = (CustomButton) e.getSource();

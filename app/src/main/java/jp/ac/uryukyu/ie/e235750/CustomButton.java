@@ -6,6 +6,7 @@ import javax.swing.Icon;
 class CustomButton extends JButton{
     private boolean flag = false;
     private boolean bomb = false;
+    private boolean open = false;
     private int bombCountNearby = 0;
 
     CustomButton(Icon icon){
@@ -29,6 +30,14 @@ class CustomButton extends JButton{
 
     public void setBomb(){
         bomb = true;
+    }
+
+    public boolean isOpen(){
+        return open;
+    }
+
+    public void setOpen(boolean open){
+        this.open = open;
     }
 
     public void setBombCountNearby(int bombCountNearby){

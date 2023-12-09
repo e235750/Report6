@@ -38,7 +38,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
     private int flagCounter       = 0;
     private int openCell          = 0;
 
-    private CustomButton[][] buttons; 
+    public CustomButton[][] buttons; 
 
 
     /**
@@ -153,6 +153,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         CustomButton clickedButton = (CustomButton) e.getSource();
         if(clickedButton.isBomb() && !clickedButton.isFlag()){
             clickedButton.setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+            clickedButton.setOpen(true);
             showAllBomb(buttons);
             int option = JOptionPane.showConfirmDialog(this, "失敗; ;\nもう一度挑戦しますか", "失敗", 0, JOptionPane.QUESTION_MESSAGE);
             switch (option) {

@@ -1,20 +1,40 @@
 package jp.ac.uryukyu.ie.e235750;
 
-import javax.swing.JButton;
-import javax.swing.Icon;
+import javax.swing.*;
+import java.awt.*;
+
 
 /**
  * 各セルに爆弾や旗の情報を持たせるためのクラス
- *  boolean flag        //旗が立っているかどうか。true->立っている, false->立っていない
- *  boolean bomb        //セルに爆弾が配置されているかどうか。true->配置されている, false->されていない
- *  boolean open        //セルが開いているかどうか。true->開いている, false->開いていない
- *  int bombCountNearby //セルの周囲の爆弾数。
+ *  ImageIcon defaultIcon; //デフォルトアイコン
+ *  ImageIcon bombIcon;    //爆弾アイコン
+ *  ImageIcon flagIcon;    //旗アイコン
+ *  int IMAGE_WIDTH;       //アイコンの横幅
+ *  int IMAGE_HEIGHT;      //アイコンの縦幅
+ *  boolean flag           //旗が立っているかどうか。true->立っている, false->立っていない
+ *  boolean bomb           //セルに爆弾が配置されているかどうか。true->配置されている, false->されていない
+ *  boolean open           //セルが開いているかどうか。true->開いている, false->開いていない
+ *  int bombCountNearby    //セルの周囲の爆弾数。
  */
 public class CustomButton extends JButton{
+    private ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/default.png")); //デフォルトのボタンアイコン
+    private ImageIcon bombIcon    = new ImageIcon(getClass().getResource("/bomb.png"));    //爆弾のボタンアイコン
+    private ImageIcon flagIcon    = new ImageIcon(getClass().getResource("/flag.png"));    //旗のアイコン
+
+    private int IMAGE_WIDTH       = 50;
+    private int IMAGE_HEIGHT      = 50;
+
     private boolean flag = false;
     private boolean bomb = false;
     private boolean open = false;
     private int bombCountNearby = 0;
+
+    /**
+     * JButtonクラスのコンストラクタ。
+     */
+    CustomButton(){
+        super();
+    }
 
     /**
      * JButtonクラスのコンストラクタ。ボタンに画像を配置できるようにする
@@ -92,5 +112,23 @@ public class CustomButton extends JButton{
      */
     public int getBombCountNearby(){
         return bombCountNearby;
+    }
+
+    public void setDefaultIcon(){
+        setIcon(new ImageIcon(defaultIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+    }
+
+    public void setBombIcon(){
+        setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+    }
+
+    public void setFlagIcon(){
+        setIcon(new ImageIcon(flagIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+    }
+
+    public void setTextIcon(){
+        setHorizontalAlignment(SwingConstants.LEFT);
+        setFont(new Font("San Francisco", Font.BOLD, 30));
+        setText(Integer.toString(getBombCountNearby()));
     }
 }

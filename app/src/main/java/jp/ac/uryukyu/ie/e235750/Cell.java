@@ -11,13 +11,8 @@ import java.util.Random;
 /**
  * ゲームウィンドウを作るクラス
  *  MinesweeperGame        //showTitlePanelとstartGameメソッドを実行する
- *  ImageIcon defaultIcon; //デフォルトアイコン
- *  ImageIcon bombIcon;    //爆弾アイコン
- *  ImageIcon flagIcon;    //旗アイコン
  *  int FIELD_ROW;         //行のセル数
  *  int FIELD_COLUMN;      //列のセル数
- *  int IMAGE_WIDTH;       //アイコンの横幅
- *  int IMAGE_HEIGHT;      //アイコンの縦幅
  *  int NUM_BOMB;          //フィールドのボム数
  *  int flagCounter        //旗の数
  *  int openCell           //開かれているセルの数
@@ -26,14 +21,8 @@ import java.util.Random;
 public class Cell extends JPanel implements ActionListener, MouseListener{
     MinesweeperGame game;
 
-    private ImageIcon defaultIcon = new ImageIcon(getClass().getResource("/default.png")); //デフォルトのボタンアイコン
-    private ImageIcon bombIcon    = new ImageIcon(getClass().getResource("/bomb.png"));    //爆弾のボタンアイコン
-    private ImageIcon flagIcon    = new ImageIcon(getClass().getResource("/flag.png"));    //旗のアイコン
-
     private int FIELD_ROW         = 5;
     private int FIELD_COLUMN      = 5;
-    private int IMAGE_WIDTH       = 50;
-    private int IMAGE_HEIGHT      = 50;
     private int NUM_BOMB          = 10;
     private int flagCounter       = 0;
     private int openCell          = 0;
@@ -55,7 +44,8 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         //セルの作成
         for (int x = 0; x < FIELD_ROW; x++) {
             for (int y = 0; y < FIELD_COLUMN; y++) {
-                buttons[x][y] = new CustomButton(new ImageIcon(defaultIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+                buttons[x][y] = new CustomButton();
+                buttons[x][y].setDefaultIcon();
                 buttons[x][y].addActionListener(this);
                 buttons[x][y].addMouseListener(this);
                 this.add(buttons[x][y]);
@@ -119,11 +109,11 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         if(!button.isOpen()){
             if(!button.isFlag() && flagCounter < NUM_BOMB){
                 button.setFlag(true);
-                button.setIcon(new ImageIcon(flagIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+                button.setFlagIcon();
                 flagCounter ++;
             } else if(button.isFlag()){
                 button.setFlag(false);
-                button.setIcon(new ImageIcon(defaultIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+                button.setDefaultIcon();
                 flagCounter --;
         }
         }
@@ -137,7 +127,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         for(int x = 0; x < FIELD_ROW; x ++){
             for(int y = 0; y < FIELD_COLUMN; y ++){
                 if(buttons[x][y].isBomb()){
-                    buttons[x][y].setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+                    buttons[x][y].setBombIcon();
                 }
             }
         }
@@ -152,8 +142,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
     public void actionPerformed(ActionEvent e) {
         CustomButton clickedButton = (CustomButton) e.getSource();
         if(clickedButton.isBomb() && !clickedButton.isFlag()){
-            clickedButton.setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
-            clickedButton.setOpen(true);
+            clickedButton.setBombIcon();
             showAllBomb(buttons);
             int option = JOptionPane.showConfirmDialog(this, "失敗; ;\nもう一度挑戦しますか", "失敗", 0, JOptionPane.QUESTION_MESSAGE);
             switch (option) {
@@ -166,9 +155,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
                     break;
             }
         } else if(!clickedButton.isFlag()){
-            clickedButton.setHorizontalAlignment(SwingConstants.LEFT);
-            clickedButton.setFont(new Font("San Francisco", Font.BOLD, 30));
-            clickedButton.setText(Integer.toString(clickedButton.getBombCountNearby()));
+            clickedButton.setTextIcon();
             if(!clickedButton.isOpen()){
                 openCell ++;
                 clickedButton.setOpen(true);

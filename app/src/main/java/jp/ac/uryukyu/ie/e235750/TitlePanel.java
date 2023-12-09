@@ -5,9 +5,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * タイトルパネルを実装するクラス
+ *  MinesweeperGame game; //starGameと実行するため
+ */
 public class TitlePanel extends JPanel {
     MinesweeperGame game = new MinesweeperGame();
 
+    /**
+     * TitlePanelのコンストラクタ。タイトル画面を実装する
+     * @param game
+     */
     public TitlePanel(MinesweeperGame game){
         this.game = game;
 

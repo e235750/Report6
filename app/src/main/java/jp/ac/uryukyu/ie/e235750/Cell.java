@@ -8,6 +8,21 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Random;
 
+/**
+ * ゲームウィンドウを作るクラス
+ *  MinesweeperGame        //showTitlePanelとstartGameメソッドを実行する
+ *  ImageIcon defaultIcon; //デフォルトアイコン
+ *  ImageIcon bombIcon;    //爆弾アイコン
+ *  ImageIcon flagIcon;    //旗アイコン
+ *  int FIELD_ROW;         //行のセル数
+ *  int FIELD_COLUMN;      //列のセル数
+ *  int IMAGE_WIDTH;       //アイコンの横幅
+ *  int IMAGE_HEIGHT;      //アイコンの縦幅
+ *  int NUM_BOMB;          //フィールドのボム数
+ *  int flagCounter        //旗の数
+ *  int openCell           //開かれているセルの数
+ *  CustomButton buttons;  //セル
+ */
 public class Cell extends JPanel implements ActionListener, MouseListener{
     MinesweeperGame game;
 
@@ -25,6 +40,11 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
 
     private CustomButton[][] buttons; 
 
+
+    /**
+     * コンストラクタ。セルを並べたパネルを生成する。
+     * @param game Minesweeperクラス。パネル制御、ゲームリスタートをする。
+     */
     public Cell(MinesweeperGame game){
         this.game = game;
 
@@ -47,6 +67,11 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         bombCountNearby(buttons);
     }
 
+    /**
+     * セルにボムを配置するメソッド
+     * RandomクラスnextIntメソッドを使用し、セルにランダムに爆弾を配置
+     * @param buttons
+     */
     private void bombSetter(CustomButton[][] buttons){
         Random rand = new Random();
         int numBomb = 0;
@@ -61,6 +86,11 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         }
     }
 
+     /**
+     * セルの周囲の爆弾の数を数える
+     * 爆弾を持たない各セルにカウントした爆弾の数を付与
+     * @param buttons //セル
+     */
     private void bombCountNearby(CustomButton[][] buttons){
         for(int x = 0; x < FIELD_ROW; x ++){
             for(int y = 0; y < FIELD_COLUMN; y ++){
@@ -81,6 +111,10 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         }
     }
 
+    /**
+     * 旗の入れ替えをするメソッド
+     * @param buttons //セル
+     */
     private void toggleFlag(CustomButton button){
         if(!button.isOpen()){
             if(!button.isFlag() && flagCounter < NUM_BOMB){
@@ -95,7 +129,12 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         }
     }
 
-
+    @Override
+    /**
+     * マウスをクリックした時の処理を実装。
+     * 右クリックしたらtoggleFlag()を実行
+     * @param e マウスをクリックした時のイベント
+     */
     public void actionPerformed(ActionEvent e) {
         CustomButton clickedButton = (CustomButton) e.getSource();
         if(clickedButton.isBomb() && !clickedButton.isFlag()){

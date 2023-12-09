@@ -23,7 +23,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
 
     private int FIELD_ROW         = 5;
     private int FIELD_COLUMN      = 5;
-    private int NUM_BOMB          = 10;
+    private int NUM_BOMB          = 7;
     private int flagCounter       = 0;
     private int openCell          = 0;
 
@@ -82,6 +82,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
      * @param buttons //セル
      */
     private void bombCountNearby(CustomButton[][] buttons){
+        //全てのボタンを調べる
         for(int x = 0; x < FIELD_ROW; x ++){
             for(int y = 0; y < FIELD_COLUMN; y ++){
                 if(!buttons[x][y].isBomb()){
@@ -89,6 +90,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
                     for(int i = x - 1; i <= x + 1; i ++){
                         for(int j = y - 1; j <= y + 1; j ++){
                             if(i >= 0 && i < FIELD_ROW && j >= 0 && j < FIELD_COLUMN){
+                                //爆弾の時の処理
                                 if(buttons[i][j].isBomb()){
                                     bombCountNearby ++;
                                 }
@@ -106,7 +108,9 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
      * @param buttons //セル
      */
     private void toggleFlag(CustomButton button){
+        //セルが開いていない時
         if(!button.isOpen()){
+            //セルが旗でないかつ旗の数が爆弾の数より少ない時
             if(!button.isFlag() && flagCounter < NUM_BOMB){
                 button.setFlag(true);
                 button.setFlagIcon();
@@ -133,6 +137,69 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         }
     }
 
+    /**
+     * 勝利判定を行うメソッド
+     * @return boolean //true->成功,false->失敗
+     */
+    public boolean isSuccess(){ 
+        //勝利判定
+        if(openCell == (FIELD_COLUMN * FIELD_ROW) - NUM_BOMB){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    /**
+     * 爆弾が設置されていないセルをクリックした時の処理を行うメソッド
+     * @param button //クリックしたボタン
+     */
+    private void handleNomalCell(CustomButton button){
+        button.setTextIcon();
+        if(!button.isOpen()){
+            openCell ++;
+            button.setOpen(true);
+        }
+    }
+
+    /**
+     * 成功した時の処理を行うメソッド
+     */
+    private void handleGameSuccess(){
+        showAllBomb(buttons);
+        int option = JOptionPane.showConfirmDialog(this, "成功！\nもう一度挑戦しますか", "成功", 0, JOptionPane.QUESTION_MESSAGE);
+        //もう一度挑戦するか
+        switch (option) {
+            //Yes
+            case 0:
+                game.startGame();
+                break;
+            //No
+            case 1:
+                game.showTitlePanel();
+                break;
+        }
+    }
+
+    /**
+     * 失敗した時の処理を行うメソッド
+     */
+    private void handleGameLost(){
+        showAllBomb(buttons);
+        int option = JOptionPane.showConfirmDialog(this, "失敗; ;\nもう一度挑戦しますか", "失敗", 0, JOptionPane.QUESTION_MESSAGE);
+        //もう一度挑戦するか
+        switch (option) {
+            //Yes
+            case 0:
+                game.startGame();
+                break;
+            //No
+            case 1:
+                game.showTitlePanel();
+                break;
+        }
+    }
+
     @Override
     /**
      * マウスをクリックした時の処理を実装。
@@ -141,47 +208,16 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
      */
     public void actionPerformed(ActionEvent e) {
         CustomButton clickedButton = (CustomButton) e.getSource();
-        if(clickedButton.isBomb() && !clickedButton.isFlag()){
+        if(!clickedButton.isFlag() && clickedButton.isBomb()){
             clickedButton.setBombIcon();
-            showAllBomb(buttons);
-            int option = JOptionPane.showConfirmDialog(this, "失敗; ;\nもう一度挑戦しますか", "失敗", 0, JOptionPane.QUESTION_MESSAGE);
-            switch (option) {
-                case 0:
-                    game.startGame();
-                    break;
-            
-                case 1:
-                    game.showTitlePanel();
-                    break;
-            }
+            handleGameLost();
         } else if(!clickedButton.isFlag()){
-            clickedButton.setTextIcon();
-            if(!clickedButton.isOpen()){
-                openCell ++;
-                clickedButton.setOpen(true);
-            } else{
-                ; //何もしない
-            }
-            
-
-            if(openCell == (FIELD_COLUMN * FIELD_ROW) - NUM_BOMB){
-                showAllBomb(buttons);
-                int option = JOptionPane.showConfirmDialog(this, "成功！\nもう一度挑戦しますか", "成功", 0, JOptionPane.QUESTION_MESSAGE);
-                switch (option) {
-                    case 0:
-                        game.startGame();
-                        break;
-            
-                    case 1:
-                        game.showTitlePanel();
-                        break;
-            }
-            }
-            
+            handleNomalCell(clickedButton);
+            if(isSuccess()){
+            handleGameSuccess();
+            }  
         }
-        
     }
-
     public void mouseClicked(MouseEvent e) {
         if (SwingUtilities.isRightMouseButton(e)) {
             CustomButton clickedButton = (CustomButton) e.getSource();

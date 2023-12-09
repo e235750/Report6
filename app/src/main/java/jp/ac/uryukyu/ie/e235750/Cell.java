@@ -34,7 +34,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
     private int FIELD_COLUMN      = 5;
     private int IMAGE_WIDTH       = 50;
     private int IMAGE_HEIGHT      = 50;
-    private int NUM_BOMB          = 1;
+    private int NUM_BOMB          = 10;
     private int flagCounter       = 0;
     private int openCell          = 0;
 
@@ -55,7 +55,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         //セルの作成
         for (int x = 0; x < FIELD_ROW; x++) {
             for (int y = 0; y < FIELD_COLUMN; y++) {
-                buttons[x][y] = new CustomButton(new ImageIcon(defaultIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+                buttons[x][y] = new CustomButton(new ImageIcon(defaultIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
                 buttons[x][y].addActionListener(this);
                 buttons[x][y].addMouseListener(this);
                 this.add(buttons[x][y]);
@@ -129,6 +129,20 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
         }
     }
 
+    /**
+     * 失敗、勝利時に全ての爆弾を表示する。
+     * @param buttons
+     */
+    private void showAllBomb(CustomButton[][] buttons){
+        for(int x = 0; x < FIELD_ROW; x ++){
+            for(int y = 0; y < FIELD_COLUMN; y ++){
+                if(buttons[x][y].isBomb()){
+                    buttons[x][y].setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+                }
+            }
+        }
+    }
+
     @Override
     /**
      * マウスをクリックした時の処理を実装。
@@ -138,7 +152,8 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
     public void actionPerformed(ActionEvent e) {
         CustomButton clickedButton = (CustomButton) e.getSource();
         if(clickedButton.isBomb() && !clickedButton.isFlag()){
-            clickedButton.setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH)));
+            clickedButton.setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
+            showAllBomb(buttons);
             int option = JOptionPane.showConfirmDialog(this, "失敗; ;\nもう一度挑戦しますか", "失敗", 0, JOptionPane.QUESTION_MESSAGE);
             switch (option) {
                 case 0:
@@ -162,6 +177,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
             
 
             if(openCell == (FIELD_COLUMN * FIELD_ROW) - NUM_BOMB){
+                showAllBomb(buttons);
                 int option = JOptionPane.showConfirmDialog(this, "成功！\nもう一度挑戦しますか", "成功", 0, JOptionPane.QUESTION_MESSAGE);
                 switch (option) {
                     case 0:

@@ -23,7 +23,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
 
     private int FIELD_ROW         = 5;
     private int FIELD_COLUMN      = 5;
-    private int NUM_BOMB          = 7;
+    private int NUM_BOMB          = 1;
     private int flagCounter       = 0;
     private int openCell          = 0;
 
@@ -146,7 +146,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
      * 勝利判定を行うメソッド
      * @return boolean //true->成功,false->失敗
      */
-    public boolean isSuccess(){ 
+    private boolean isSuccess(){ 
         //勝利判定
         if(openCell == (FIELD_COLUMN * FIELD_ROW) - NUM_BOMB){
             return true;

@@ -33,3 +33,7 @@ gradle jar
 java -jar app/build/libs/app.jar
 ```
 
+## 参考
+- TATSUO IKURA. "Swingを使ってみよう". JavaDrive. 2022-04-08.
+  https://www.javadrive.jp/tutorial/ (2023-12-11) 
+

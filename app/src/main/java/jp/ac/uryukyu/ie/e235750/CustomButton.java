@@ -3,7 +3,6 @@ package jp.ac.uryukyu.ie.e235750;
 import javax.swing.*;
 import java.awt.*;
 
-
 /**
  * 各セルに爆弾や旗の情報を持たせるためのクラス
  *  ImageIcon defaultIcon; //デフォルトアイコン
@@ -99,6 +98,14 @@ public class CustomButton extends JButton{
     }
 
     /**
+     * bombCountNearbyのgetter
+     * @return int bombCountNearby
+     */
+    public int getBombCountNearby(){
+        return bombCountNearby;
+    }
+
+    /**
      * セルに周囲の爆弾数をセットする
      * @param bombCountNearby
      */
@@ -107,25 +114,29 @@ public class CustomButton extends JButton{
     }
 
     /**
-     * bombCountNearbyのgetter
-     * @return int bombCountNearby
+     * セルにデフォルトのアイコンを割り当てる
      */
-    public int getBombCountNearby(){
-        return bombCountNearby;
-    }
-
     public void setDefaultIcon(){
         setIcon(new ImageIcon(defaultIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
     }
 
+    /**
+     * セルに爆弾のアイコンを割り当てる
+     */
     public void setBombIcon(){
         setIcon(new ImageIcon(bombIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
     }
 
+    /**
+     * セルに旗のアイコンを割り当てる
+     */
     public void setFlagIcon(){
         setIcon(new ImageIcon(flagIcon.getImage().getScaledInstance(IMAGE_WIDTH, IMAGE_HEIGHT, Image.SCALE_SMOOTH)));
     }
 
+    /**
+     * セルにテキストを割り当てる
+     */
     public void setTextIcon(){
         setHorizontalAlignment(SwingConstants.LEFT);
         setFont(new Font("San Francisco", Font.BOLD, 30));

@@ -26,7 +26,7 @@ public class MinesweeperGame extends JFrame {
     }
 
     /**
-     * タイトルパネルをセットしてフレームに表示する
+     * タイトルパネルをフレームにセットして表示する
      */
     public void showTitlePanel() {
         TitlePanel titlePanel = new TitlePanel(this);
@@ -42,7 +42,7 @@ public class MinesweeperGame extends JFrame {
     }
 
     /**
-     * titlePanelとgamePanel(Cell)をフレームに追加する
+     * 引数に指定したパネルをフレームにセットする
      * @param panel //titlePanelとgamePanel(Cell))を指定
      */
     private void setPanel(JPanel panel) {

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class bombCountTest {
     private int FIELD_ROW         = 5;
     private int FIELD_COLUMN      = 5;
-    private int NUM_BOMB          = 10;
+    private int NUM_BOMB          = 7;
     private int bombCounter       = 0;
 
     @Test

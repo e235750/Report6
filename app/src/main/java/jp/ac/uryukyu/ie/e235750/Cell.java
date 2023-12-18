@@ -23,7 +23,7 @@ public class Cell extends JPanel implements ActionListener, MouseListener{
 
     private int FIELD_ROW         = 5;
     private int FIELD_COLUMN      = 5;
-    private int NUM_BOMB          = 1;
+    private int NUM_BOMB          = 7;
     private int flagCounter       = 0;
     private int openCell          = 0;
 

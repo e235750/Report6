@@ -49,12 +49,24 @@ public class TitlePanel extends JPanel {
             }
         });
 
+        JButton role = new JButton("遊び方");
+        role.setPreferredSize(new Dimension(150, 80));
+        role.setFont(new Font("San Francisco", Font.BOLD, 15));
+        role.setMaximumSize(new Dimension(Integer.MAX_VALUE, role.getMinimumSize().height)); // 幅を最大まで
+        //アクションリスナー追加
+        role.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                game.showRolePanel();
+            }
+        });
+
         JLabel gameTitle = new JLabel("マインスイーパー(prog2課題)");
         gameTitle.setFont(new Font("San Francisco", Font.BOLD, 25));
         
         
         panelButton.add(start);
         panelButton.add(exit);
+        panelButton.add(role);
         panelTitle.add(gameTitle);
         panelTitle.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 

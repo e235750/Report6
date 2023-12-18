@@ -41,6 +41,11 @@ public class MinesweeperGame extends JFrame {
         setPanel(gamePanel);
     }
 
+    public void showRolePanel(){
+        RolePanel rolePanel = new RolePanel(this);
+        setPanel(rolePanel);
+    }
+
     /**
      * 引数に指定したパネルをフレームにセットする
      * @param panel //titlePanelとgamePanel(Cell))を指定

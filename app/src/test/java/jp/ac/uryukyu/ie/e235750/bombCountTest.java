@@ -12,24 +12,29 @@ import static org.junit.jupiter.api.Assertions.*;
  *  4.期待する爆弾の数とbombCounterをassertEqualsメソッドで比較する。
  */
 public class bombCountTest {
-    private int FIELD_ROW         = 5;
-    private int FIELD_COLUMN      = 5;
-    private int NUM_BOMB          = 7;
-    private int bombCounter       = 0;
+    //enumで設定した値
+    int[] NUM_CELL   = {4, 5, 7};  //難易度別一辺のセル数
+    int[] NUM_BOMB   = {4, 5, 10}; //難易度別の爆弾数
+
+    MinesweeperGame game = new MinesweeperGame();
 
     @Test
     void test(){
-        MinesweeperGame game = new MinesweeperGame();
-        Cell gamePanel = new Cell(game);
-        CustomButton[][] buttons = gamePanel.buttons;
+        int INDEX = Difficulty.values().length;
+        for(int i = 0; i < INDEX; i ++){
+            int bombCounter  = 0;
+            Cell gamePanel = new Cell(game, i);
+            CustomButton[][] buttons = gamePanel.buttons;
 
-        for (int x = 0; x < FIELD_ROW; x++) {
-            for (int y = 0; y < FIELD_COLUMN; y++) {
-                if(buttons[x][y].isBomb()){
-                    bombCounter ++;
-                }                
+            for (int x = 0; x < NUM_CELL[i]; x++) {
+                for (int y = 0; y < NUM_CELL[i]; y++) {
+                    if(buttons[x][y].isBomb()){
+                        bombCounter ++;
+                    }                
+                }
             }
+            assertEquals((int)NUM_BOMB[i], (int)bombCounter);
         }
-        assertEquals((int)NUM_BOMB, (int)bombCounter);
+       
     }
 }

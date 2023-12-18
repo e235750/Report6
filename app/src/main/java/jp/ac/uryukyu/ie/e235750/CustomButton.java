@@ -10,6 +10,7 @@ import java.awt.*;
  *  ImageIcon flagIcon;    //旗アイコン
  *  int IMAGE_WIDTH;       //アイコンの横幅
  *  int IMAGE_HEIGHT;      //アイコンの縦幅
+ *  int FONT_SIZE          //フォントのサイズ
  *  boolean flag           //旗が立っているかどうか。true->立っている, false->立っていない
  *  boolean bomb           //セルに爆弾が配置されているかどうか。true->配置されている, false->されていない
  *  boolean open           //セルが開いているかどうか。true->開いている, false->開いていない
@@ -22,6 +23,8 @@ public class CustomButton extends JButton{
 
     private int IMAGE_WIDTH       = 50;
     private int IMAGE_HEIGHT      = 50;
+
+    private int FONT_SIZE          = 22;
 
     private boolean flag = false;
     private boolean bomb = false;
@@ -139,7 +142,7 @@ public class CustomButton extends JButton{
      */
     public void setTextIcon(){
         setHorizontalAlignment(SwingConstants.LEFT);
-        setFont(new Font("San Francisco", Font.BOLD, 30));
+        setFont(new Font("San Francisco", Font.BOLD, FONT_SIZE));
         setText(Integer.toString(getBombCountNearby()));
     }
 }

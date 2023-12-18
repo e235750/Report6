@@ -23,6 +23,7 @@ public class MinesweeperGame extends JFrame {
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
     }
 
     /**
@@ -34,13 +35,36 @@ public class MinesweeperGame extends JFrame {
     }
 
     /**
+     * ユーザーに難易度を選択させる３つのオプションを表示する
+     * @return int index //1 ->初級, 2 ->中級, 3 -> 上級 
+     */
+    private int selectDifficulty(){
+        String[] difficulty = {"初級", "中級", "上級"};
+        int index = JOptionPane.showOptionDialog(this, 
+        "難易度を選択してください",
+            "難易度選択",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            difficulty,
+            null
+            );
+        return index;
+    }
+
+    /**
      * gamePanel(Cell)をセットしてフレームに表示する
+     * selectDifficultyで取得した難易度からゲームパネルを生成する
      */
     public void showGamePanel() {
-        Cell gamePanel = new Cell(this);
+        int index = selectDifficulty();
+        Cell gamePanel = new Cell(this, index);
         setPanel(gamePanel);
     }
 
+    /**
+     * 遊び方を表示するパネル
+     */
     public void showRolePanel(){
         RolePanel rolePanel = new RolePanel(this);
         setPanel(rolePanel);

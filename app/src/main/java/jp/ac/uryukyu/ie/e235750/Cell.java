@@ -21,24 +21,32 @@ import java.util.Random;
 public class Cell extends JPanel implements ActionListener, MouseListener{
     MinesweeperGame game;
 
-    private int FIELD_ROW         = 5;
-    private int FIELD_COLUMN      = 5;
-    private int NUM_BOMB          = 7;
-    private int flagCounter       = 0;
-    private int openCell          = 0;
+    private static int FIELD_ROW        ;
+    private static int FIELD_COLUMN     ;
+    private static int NUM_BOMB         ;
+    private int flagCounter          = 0;
+    private int openCell             = 0;
 
     public CustomButton[][] buttons; 
 
+    public static void setConstant(int row, int column, int numBomb){
+        FIELD_ROW     = row;
+        FIELD_COLUMN  = column;
+        NUM_BOMB      = numBomb;
+    }
 
     /**
      * コンストラクタ。セルを並べたパネルを生成する。
      * @param game Minesweeperクラス。パネル制御、ゲームリスタートをする。
+     * @param difficulty 難易度選択用インデックス, 0 -> 初級, 1 ->中級, 2 ->上級
      */
-    public Cell(MinesweeperGame game){
+    public Cell(MinesweeperGame game, int difficulty){
         this.game = game;
 
+        Difficulty.executeSetDifficulty(difficulty, this);
+
         //パネルの設定
-        setLayout(new GridLayout(FIELD_COLUMN, FIELD_ROW));  //5 * 5マスに設定
+        setLayout(new GridLayout(FIELD_COLUMN, FIELD_ROW));
         buttons = new CustomButton[FIELD_COLUMN][FIELD_ROW]; //ボタンを配列で宣言
 
         //セルの作成
